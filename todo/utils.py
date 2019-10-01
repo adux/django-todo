@@ -51,7 +51,7 @@ def todo_get_mailer(user, task):
         return (None, mail.get_connection)
 
     from_address = getattr(task_backend, "from_address")
-    from_address = email.utils.formataddr((user.username, from_address))
+    from_address = email.utils.formataddr((user.email, from_address))
     return (from_address, task_backend)
 
 
