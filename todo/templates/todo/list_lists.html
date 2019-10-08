@@ -5,11 +5,11 @@
 {% block content %}
   <h1>Project Lists</h1>
 
-  <p>{{ task_count }} tasks in {{ list_count }} subProject{{ list_count|pluralize }}</p>
+  <p>{{ task_count }} tasks in {{group_count}} Project{{group_count|pluralize}} with {{ list_count }} subProject{{ list_count|pluralize }}</p>
 
   {% regroup lists by group as section_list %}
   {% for group in section_list %}
-    <h3>Project: {{ group.grouper }}</h3>
+    <h3>{{ group.grouper }}</h3>
     <ul class="list-group mb-4">
       {% for task in group.list %}
       <li class="list-group-item d-flex justify-content-between align-items-center">

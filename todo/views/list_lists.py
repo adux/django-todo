@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.db.models import Count
 
 from todo.forms import SearchForm
 from todo.models import Task, TaskList
@@ -32,7 +33,9 @@ def list_lists(request) -> HttpResponse:
         lists = lists.filter(group__in=request.user.groups.all())
 
     list_count = lists.count()
-
+    group_count = lists.values(
+        'group'
+    ).annotate(total=Count('group')).order_by('total').count()
     # superusers see all lists, so count shouldn't filter by just lists the admin belongs to
     if request.user.is_superuser:
         task_count = Task.objects.filter(completed=0).count()
@@ -49,6 +52,7 @@ def list_lists(request) -> HttpResponse:
         "searchform": searchform,
         "list_count": list_count,
         "task_count": task_count,
+        "group_count": group_count,
     }
 
     return render(request, "todo/list_lists.html", context)
